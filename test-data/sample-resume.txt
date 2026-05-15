@@ -1,0 +1,41 @@
+JOHN SMITH
+john.smith@email.com | (555) 123-4567 | LinkedIn: linkedin.com/in/johnsmith
+
+PROFESSIONAL SUMMARY
+Experienced IT professional with 5+ years managing enterprise device management solutions including Jamf, Workspace ONE, and Microsoft Intune. Proven track record of deploying and maintaining MDM infrastructure for organizations with 1000+ endpoints.
+
+EXPERIENCE
+
+Senior Client Platform Engineer
+TechCorp Financial Services | San Francisco, CA | 2021 - Present
+- Managed Jamf Pro deployment for 1,200 macOS devices
+- Implemented zero-touch deployment workflows reducing setup time by 60%
+- Created custom configuration profiles and scripts for automated software deployment
+- Collaborated with security team to enforce compliance policies across all endpoints
+
+Client Platform Engineer  
+StartupXYZ | Remote | 2019 - 2021
+- Administered Workspace ONE environment supporting 800 iOS and Android devices
+- Developed PowerShell scripts for automated device enrollment
+- Reduced manual enrollment time from 45 minutes to 5 minutes per device
+- Provided tier 2 and tier 3 support for MDM-related issues
+
+IT Support Specialist
+Local Business Inc | Oakland, CA | 2018 - 2019  
+- Provided helpdesk support for 200+ employees
+- Assisted with basic device setup and troubleshooting
+- Maintained inventory of hardware assets
+
+TECHNICAL SKILLS
+MDM Solutions: Jamf Pro, Workspace ONE, Microsoft Intune
+Scripting: Bash, PowerShell, Python (basic)
+Operating Systems: macOS, iOS, Windows, Android
+Tools: Active Directory, Azure AD, Git, ServiceNow
+
+EDUCATION
+Bachelor of Science in Information Technology
+State University | 2018
+
+CERTIFICATIONS
+- Jamf Certified Associate
+- Apple Certified Support Professional
