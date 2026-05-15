@@ -75,6 +75,7 @@
       cursor: pointer;
       transition: transform 0.2s;
       font-weight: 600;
+      margin-right: 10px;
     }
 
     .btn:hover {
@@ -88,14 +89,32 @@
       transform: none;
     }
 
+    .btn-mock {
+      background: linear-gradient(135deg, #999 0%, #777 100%);
+    }
+
     .result {
       margin-top: 30px;
       padding: 30px;
       background: #f8f9ff;
       border-radius: 12px;
       border-left: 4px solid #667eea;
-      white-space: pre-wrap;
       line-height: 1.8;
+    }
+
+    .result h3 {
+      color: #667eea;
+      margin: 20px 0 10px 0;
+      font-size: 1.3em;
+    }
+
+    .result strong {
+      color: #333;
+      font-weight: 600;
+    }
+
+    .result p {
+      margin: 15px 0;
     }
 
     .loading {
@@ -147,7 +166,10 @@
 
     <div id="filename" class="filename" style="display: none;"></div>
 
-    <button class="btn" id="analyzeBtn" style="display: none;">Analyze Resume</button>
+    <div style="margin: 20px 0;">
+      <button class="btn" id="analyzeBtn" style="display: none;">Analyze Resume</button>
+      <button class="btn btn-mock" id="mockBtn">View Sample Result (No API Call)</button>
+    </div>
 
     <div id="loading" class="loading" style="display: none;">
       <div class="spinner"></div>
@@ -161,11 +183,76 @@
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const analyzeBtn = document.getElementById('analyzeBtn');
+    const mockBtn = document.getElementById('mockBtn');
     const loading = document.getElementById('loading');
     const result = document.getElementById('result');
     const filenameDiv = document.getElementById('filename');
 
     let selectedFile = null;
+
+    // Sample mock data for testing design without API calls
+    const mockAnalysis = `**ATS Compatibility Score: 72/100**
+
+**Explanation:** The resume has good keyword usage and clear structure, but lacks proper section headers, has inconsistent date formatting, and could benefit from more quantified achievements. The content is relevant but needs better optimization for ATS parsing.
+
+## Top 3-5 Critical Issues for ATS Rejection
+
+1. **Missing core section headers**: No "SKILLS" header - just "TECHNICAL SKILLS" which some ATS may not recognize
+2. **Inconsistent date formatting**: Mix of "2021 - Present" vs "2018 - 2019" creates parsing confusion
+3. **Weak quantification**: Limited metrics and numbers that ATS algorithms prioritize for ranking
+4. **Generic job titles**: "IT Support Specialist" is too broad and doesn't contain key MDM/endpoint management terms
+5. **Missing industry keywords**: Lacks terms like "endpoint security," "device compliance," "enterprise mobility"
+
+## 5-7 Specific Improvement Suggestions
+
+1. **Add standard "SKILLS" section** with comma-separated keywords: "Mobile Device Management (MDM), Jamf Pro, Microsoft Intune, Workspace ONE, Endpoint Security, Device Compliance"
+
+2. **Standardize all dates** to "MM/YYYY - MM/YYYY" format (e.g., "01/2021 - Present")
+
+3. **Add 2-3 more quantified achievements** per role:
+   - "Achieved 99.5% device compliance rate across enterprise environment"
+   - "Reduced security incidents by 40% through automated compliance monitoring"
+
+4. **Include location format consistently**: Use full format for all jobs ("San Francisco, CA" vs just "Remote")
+
+5. **Add "CORE COMPETENCIES" section** with: Enterprise Mobility Management, Zero Trust Security, Automated Deployment, Device Lifecycle Management, IT Service Management
+
+## LinkedIn Headline Options
+
+1. Senior Client Platform Engineer | MDM Specialist (Jamf, Intune, Workspace ONE) | Enterprise Mobility Expert
+2. IT Infrastructure Pro | 5+ Years Managing Apple/Microsoft Endpoints | Jamf Certified
+3. Client Platform Engineer | Automating Device Management at Scale | MDM • Scripting • Security
+4. Enterprise Device Management Specialist | Jamf Pro • Workspace ONE • Intune | 1200+ Endpoints
+5. Apple Enterprise Expert | Jamf & MDM Solutions | Reducing IT Friction Through Automation
+
+## Missing Keywords to Add
+
+- Endpoint security, device compliance, enterprise mobility
+- Zero-touch deployment, DEP (Device Enrollment Program), ABM (Apple Business Manager)  
+- Conditional access, mobile threat defense
+- BYOD (Bring Your Own Device), corporate-owned devices
+- Patch management, software distribution
+- Identity and access management (IAM)`;
+
+    // Function to format the analysis
+    function formatAnalysis(text) {
+      const formatted = text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/##\s*(.+)/g, '<h3>$1</h3>')
+        .replace(/(\d+\.)\s*\*\*(.+?)\*\*/g, '$1 <strong>$2</strong>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+      
+      return '<p>' + formatted + '</p>';
+    }
+
+    // Mock button - shows sample result without API call
+    mockBtn.addEventListener('click', () => {
+      loading.style.display = 'none';
+      result.style.display = 'block';
+      result.className = 'result';
+      result.innerHTML = formatAnalysis(mockAnalysis);
+    });
 
     // Click to upload
     uploadArea.addEventListener('click', () => fileInput.click());
@@ -176,7 +263,7 @@
       if (selectedFile) {
         filenameDiv.textContent = `Selected: ${selectedFile.name}`;
         filenameDiv.style.display = 'block';
-        analyzeBtn.style.display = 'block';
+        analyzeBtn.style.display = 'inline-block';
       }
     });
 
@@ -197,20 +284,18 @@
       if (selectedFile) {
         filenameDiv.textContent = `Selected: ${selectedFile.name}`;
         filenameDiv.style.display = 'block';
-        analyzeBtn.style.display = 'block';
+        analyzeBtn.style.display = 'inline-block';
       }
     });
 
-    // Analyze button
+    // Analyze button - actual API call
     analyzeBtn.addEventListener('click', async () => {
       if (!selectedFile) return;
 
-      // Show loading
       loading.style.display = 'block';
       result.style.display = 'none';
       analyzeBtn.disabled = true;
 
-      // Create form data
       const formData = new FormData();
       formData.append('resume', selectedFile);
 
@@ -227,7 +312,7 @@
 
         if (data.success) {
           result.className = 'result';
-          result.textContent = data.analysis;
+          result.innerHTML = formatAnalysis(data.analysis);
         } else {
           result.className = 'result error';
           result.textContent = `Error: ${data.error}`;
