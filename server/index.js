@@ -89,3 +89,5 @@ app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
   console.log(`📄 Open http://localhost:${PORT} in your browser`);
 });
+
+module.exports = app;
